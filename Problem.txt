@@ -1,0 +1,15 @@
+Create an Employee management system which is connected to the database
+
+STEP 1: Create dataBase in mySQL [Done]
+STEP 2: Create classes
+    -> Create an interface that will give all the functionality. [Done]
+        [
+            1. Add employee
+            2. Show all employee details
+            3. Get employee details
+            4. Update employee details
+            5. Remove employee
+        ]
+
+STEP 2: Create a class implementing it []
+    -> Create a dbConnection class [done]
