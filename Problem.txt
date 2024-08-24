@@ -11,5 +11,7 @@ STEP 2: Create classes
             5. Remove employee
         ]
 
-STEP 2: Create a class implementing it []
+STEP 2: Create a class implementing it [done]
     -> Create a dbConnection class [done]
+
+STEP 3: Implements all methods [done]

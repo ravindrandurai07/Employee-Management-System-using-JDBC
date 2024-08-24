@@ -7,16 +7,6 @@ public class EmployeeInfo implements EmployeeManager{
 
     static Scanner sc = new Scanner(System.in);
     Connection con;
-    ResultSet rs;
-    PreparedStatement ps;
-
-    public static void main(String[] args) {
-
-        System.out.println(DBConnection.getDBConnection());
-
-        EmployeeManager employeeManager = new EmployeeInfo();
-        employeeManager.addEmployee();
-    }
 
     private static class DBConnection {
         private static final String URL = "jdbc:mysql://localhost:3306/ravi";
@@ -39,8 +29,8 @@ public class EmployeeInfo implements EmployeeManager{
     @Override
     public void addEmployee() {
         con = DBConnection.getDBConnection();
-        int eid = getEmployeeId();sc.nextLine();
         String name = getName();
+        int eid = getEmployeeId();sc.nextLine();
         byte age = getAge();
         int sal = getSalary();
 
@@ -53,38 +43,93 @@ public class EmployeeInfo implements EmployeeManager{
             ps.setInt(4, sal);
 
             int count = ps.executeUpdate();
-            System.out.println(count);
+            System.out.println(count + " rows created");
             con.close();
             ps.close();
 
         } catch (SQLException e) {
-            System.out.println("Could not add employee");
+            System.out.println("\t\tCould not add employee");
         }
-    }
-
-    private PreparedStatement prepSt(){
-        return null;
     }
 
     @Override
     public void displayALlEmployees() {
+        try {
+            con = DBConnection.getDBConnection();
+            String query = "select * from emps;";
+            assert con != null;
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
 
+            System.out.println("Name\t\t" + "id\t\t" + "age\t " + "salary");
+            System.out.println("-------------------------------");
+            while (rs.next()){
+                System.out.println(rs.getString(1) + "\t\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t " + rs.getInt(4));
+            }
+        }
+         catch (SQLException e) {
+             System.out.println("\t\tCould not fetch details");
+        }
     }
 
     @Override
     public void getEmployeeDetails(int id) {
-
+        try {
+            con = DBConnection.getDBConnection();
+            String query = "select * from emps where id =?;";
+            assert con != null;
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            System.out.println("Name\t\t" + "id\t\t" + "age\t " + "salary");
+            System.out.println("-------------------------------");
+            System.out.println(rs.getString(1) + "\t\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t " + rs.getInt(4));
+        }
+        catch (SQLException e) {
+            System.out.println("\t\tCould not fetch details");
+        }
     }
 
     @Override
     public void updateEmployee(int id) {
+        sc.nextLine();
 
+        try{
+            con = DBConnection.getDBConnection();
+            String query = "UPDATE emps SET name =?, age =?, salary =? WHERE id =?;";
+            assert con != null;
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, getName());
+            ps.setInt(2, getAge());
+            ps.setInt(3, getSalary());
+            ps.setInt(4, id);
+
+            int n = ps.executeUpdate();
+            System.out.println(n + " rows modified");
+        }
+        catch (SQLException e){
+            System.out.println("\t\tCould not update");
+        }
     }
 
     @Override
     public void removeEmployee(int id) {
 
+        String query = "DELETE FROM emps WHERE id = ?;";
+        try {
+            con = DBConnection.getDBConnection();
+            assert con != null;
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            int n = ps.executeUpdate();
+            System.out.println(n +  " rows deleted");
+        }
+        catch (SQLException e){
+            System.out.println("\t\tCould not remove ");
+        }
     }
+
     //getting e-id from user
     private static int getEmployeeId(){
         System.out.print ("Enter Employee id : ");
@@ -98,11 +143,13 @@ public class EmployeeInfo implements EmployeeManager{
         }
         return getEmployeeId();
     }
+
     //getting name from user
     private static String getName (){
         System.out.print ("Enter Employee Name : ");
         return sc.nextLine();
     }
+
     //getting sal from user
     private static int getSalary (){
         System.out.print("Enter Salary : ");
@@ -115,6 +162,7 @@ public class EmployeeInfo implements EmployeeManager{
         }
         return getSalary();
     }
+
     //getting age from user
     private static byte getAge (){
         System.out.print("Enter Age : ");
