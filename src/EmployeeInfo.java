@@ -5,11 +5,21 @@ import java.util.stream.Stream;
 
 public class EmployeeInfo implements EmployeeManager{
 
-    static Scanner sc;
+    static EmployeeInfo employeeInfo;
+
+    public static EmployeeInfo getEmployeeManager(){
+        if (employeeInfo == null){
+            employeeInfo = new EmployeeInfo();
+            return employeeInfo;
+        }
+        return employeeInfo;
+    }
+
+
+    static Scanner sc = new Scanner(System.in);
     Connection con;
 
-    public EmployeeInfo(Scanner sc){
-        EmployeeInfo.sc = sc;
+    private EmployeeInfo(){
     }
 
     private static class DBConnection {

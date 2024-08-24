@@ -6,10 +6,11 @@ import java.util.Scanner;
 public class Main {
     static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
-        EmployeeManager em = new EmployeeInfo(sc);
+        EmployeeManager em = EmployeeInfo.getEmployeeManager();
         System.out.println("\t\tWelcome to Employee Management DataBase");
         System.out.println("\t\t---------------------------------------");
 
+        boolean flag;
         do {
             System.out.println();
             StringBuilder sb = new StringBuilder();
@@ -49,7 +50,9 @@ public class Main {
             }
 
             System.out.print("Do you want to continue (true / false) : ");
-        } while (sc.nextBoolean());
+            flag = sc.nextBoolean();
+            sc.nextLine();
+        } while (flag);
         System.out.println("<END>");
     }
 }
