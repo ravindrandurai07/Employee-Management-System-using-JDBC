@@ -5,8 +5,12 @@ import java.util.stream.Stream;
 
 public class EmployeeInfo implements EmployeeManager{
 
-    static Scanner sc = new Scanner(System.in);
+    static Scanner sc;
     Connection con;
+
+    public EmployeeInfo(Scanner sc){
+        EmployeeInfo.sc = sc;
+    }
 
     private static class DBConnection {
         private static final String URL = "jdbc:mysql://localhost:3306/ravi";
@@ -28,6 +32,7 @@ public class EmployeeInfo implements EmployeeManager{
 
     @Override
     public void addEmployee() {
+        sc.nextLine();
         con = DBConnection.getDBConnection();
         String name = getName();
         int eid = getEmployeeId();sc.nextLine();
@@ -66,6 +71,7 @@ public class EmployeeInfo implements EmployeeManager{
             while (rs.next()){
                 System.out.println(rs.getString(1) + "\t\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t " + rs.getInt(4));
             }
+            con.close();
         }
          catch (SQLException e) {
              System.out.println("\t\tCould not fetch details");
@@ -85,6 +91,8 @@ public class EmployeeInfo implements EmployeeManager{
             System.out.println("Name\t\t" + "id\t\t" + "age\t " + "salary");
             System.out.println("-------------------------------");
             System.out.println(rs.getString(1) + "\t\t" + rs.getInt(2) + "\t" + rs.getInt(3) + "\t " + rs.getInt(4));
+            con.close();
+            ps.close();
         }
         catch (SQLException e) {
             System.out.println("\t\tCould not fetch details");
@@ -107,6 +115,8 @@ public class EmployeeInfo implements EmployeeManager{
 
             int n = ps.executeUpdate();
             System.out.println(n + " rows modified");
+            con.close();
+            ps.close();
         }
         catch (SQLException e){
             System.out.println("\t\tCould not update");
@@ -124,6 +134,9 @@ public class EmployeeInfo implements EmployeeManager{
             ps.setInt(1, id);
             int n = ps.executeUpdate();
             System.out.println(n +  " rows deleted");
+            con.close();
+            ps.close();
+
         }
         catch (SQLException e){
             System.out.println("\t\tCould not remove ");

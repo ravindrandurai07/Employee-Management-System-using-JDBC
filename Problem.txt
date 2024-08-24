@@ -15,3 +15,5 @@ STEP 2: Create a class implementing it [done]
     -> Create a dbConnection class [done]
 
 STEP 3: Implements all methods [done]
+
+STEP 4: Create the Main class
